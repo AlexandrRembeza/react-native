@@ -12,7 +12,7 @@ import { styles } from "./RegistrationScreenStyle";
 import AddIcon from "../../../assets/images/addicon.svg";
 import { useState, useEffect } from "react";
 
-export default function RegistrationScreen() {
+export default function RegistrationScreen({ navigation }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,7 +34,10 @@ export default function RegistrationScreen() {
   const handleSubmit = () => {
     if (!name || !email || !password)
       return Alert.alert("You have empty field(s)");
-    Alert.alert("User Data", `${name} ${email} ${password}`);
+    setName("");
+    setEmail("");
+    setPassword("");
+    navigation.navigate("Home", { user: { name, email, password } });
   };
 
   useEffect(() => {
@@ -129,9 +132,16 @@ export default function RegistrationScreen() {
             >
               <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
-            <Text style={styles.entryText}>
-              Already have an account? Sign in
-            </Text>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              style={{ marginTop: 16 }}
+              onPress={() => navigation.navigate("Login")}
+            >
+              <Text style={styles.questionText}>
+                Already have an account?{" "}
+                <Text style={styles.loginText}>Sign in</Text>
+              </Text>
+            </TouchableOpacity>
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>

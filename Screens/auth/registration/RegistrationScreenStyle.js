@@ -83,12 +83,14 @@ export const styles = StyleSheet.create({
     lineHeight: 19,
     color: "#ffffff",
   },
-  entryText: {
+  questionText: {
     fontFamily: "Roboto-Regular",
     fontWeight: "400",
     fontSize: 16,
     lineHeight: 19,
-    marginTop: 16,
     color: "#1B4371",
+  },
+  loginText: {
+    fontFamily: "Roboto-Medium",
   },
 });

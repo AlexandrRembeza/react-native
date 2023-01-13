@@ -11,7 +11,7 @@ import {
 import { styles } from "./LoginScreenStyle";
 import { useState, useEffect } from "react";
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isShownKeyboard, setIsShownKeyboard] = useState(false);
@@ -30,7 +30,9 @@ export default function LoginScreen() {
 
   const handleSubmit = () => {
     if (!email || !password) return Alert.alert("You have empty field(s)");
-    Alert.alert("User Data", `${email} ${password}`);
+    navigation.navigate("Home", { user: { email, password } });
+    setEmail("");
+    setPassword("");
   };
 
   useEffect(() => {
@@ -108,9 +110,16 @@ export default function LoginScreen() {
             >
               <Text style={styles.buttonText}>Sign in</Text>
             </TouchableOpacity>
-            <Text style={styles.registerText}>
-              Don't have account? register
-            </Text>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={{ marginTop: 16 }}
+              onPress={() => navigation.navigate("Registration")}
+            >
+              <Text style={styles.questionText}>
+                Don't have account?{" "}
+                <Text style={styles.registerText}>Sign up</Text>
+              </Text>
+            </TouchableOpacity>
           </View>
         </TouchableWithoutFeedback>
       </ImageBackground>
