@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, TouchableOpacity, FlatList } from "react-native";
-import Logout from "../../../assets/images/logout.svg";
+import Logout from "../../../../assets/images/logout.svg";
 import { styles } from "./PostsScreenStyle";
 import { Post } from "../onePost/OnePost";
-import { POSTS } from "../../../posts";
+import { POSTS } from "../../../../posts";
 
 const PostsScreen = ({ navigation, user: { name, email } }) => {
   const lastElemId = POSTS[POSTS.length - 1].id;

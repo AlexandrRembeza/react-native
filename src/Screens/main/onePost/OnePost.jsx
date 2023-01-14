@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { styles } from "./OnePostStyle";
-import CommentIcon from "../../../assets/images/message-circle.svg";
-import MapPinIcon from "../../../assets/images/map-pin.svg";
-import LikeIcon from "../../../assets/images/like-icon.svg";
+import CommentIcon from "../../../../assets/images/message-circle.svg";
+import MapPinIcon from "../../../../assets/images/map-pin.svg";
+import LikeIcon from "../../../../assets/images/like-icon.svg";
 
 export const Post = ({ post, lastElemId, onClick, fromProfile }) => {
   const location = () => {

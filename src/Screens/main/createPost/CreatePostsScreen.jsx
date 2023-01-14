@@ -8,10 +8,10 @@ import {
   Keyboard,
 } from "react-native";
 import { styles } from "./CreatePostsScreenStyle";
-import ArrowLeftIcon from "../../../assets/images/arrow-left.svg";
-import CameraIcon from "../../../assets/images/camera.svg";
-import MapPinIcon from "../../../assets/images/map-pin.svg";
-import TrashIcon from "../../../assets/images/trash-2.svg";
+import ArrowLeftIcon from "../../../../assets/images/arrow-left.svg";
+import CameraIcon from "../../../../assets/images/camera.svg";
+import MapPinIcon from "../../../../assets/images/map-pin.svg";
+import TrashIcon from "../../../../assets/images/trash-2.svg";
 
 const CreatePostsScreen = ({ navigation }) => {
   const [post, setPost] = useState({

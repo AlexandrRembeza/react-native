@@ -1,7 +1,7 @@
 import React from "react";
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
-import useRoute from "./route";
+import useRoute from "./src/route";
 
 export default function App() {
   const [fontsLoaded, error] = useFonts({

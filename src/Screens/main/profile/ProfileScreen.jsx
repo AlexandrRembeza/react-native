@@ -4,14 +4,12 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  Image,
   ImageBackground,
-  Alert,
 } from "react-native";
 import { styles } from "./ProfileScreenStyle";
-import XIcon from "../../../assets/images/X-icon.svg";
-import Logout from "../../../assets/images/logout.svg";
-import { POSTS } from "../../../posts";
+import XIcon from "../../../../assets/images/X-icon.svg";
+import Logout from "../../../../assets/images/logout.svg";
+import { POSTS } from "../../../../posts";
 import { Post } from "../onePost/OnePost";
 
 const ProfileScreen = ({ navigation, user: { name } }) => {
@@ -25,7 +23,7 @@ const ProfileScreen = ({ navigation, user: { name } }) => {
     <>
       <ImageBackground
         style={styles.bgImage}
-        source={require("../../../assets/images/registerBG.png")}
+        source={require("../../../../assets/images/registerBG.png")}
       >
         <ScrollView
           contentContainerStyle={styles.container}

@@ -1,9 +1,9 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { styles } from "./HomeStyle";
-import PlusIcon from "../../../assets/images/plusIcon-black.svg";
-import GridIcon from "../../../assets/images/grid.svg";
-import UserIcon from "../../../assets/images/user.svg";
+import PlusIcon from "../../../../assets/images/plusIcon-black.svg";
+import GridIcon from "../../../../assets/images/grid.svg";
+import UserIcon from "../../../../assets/images/user.svg";
 
 import PostsScreen from "../posts/PostsScreen";
 import CreatePostsScreen from "../createPost/CreatePostsScreen";

@@ -10,11 +10,11 @@ import {
   TextInput,
   Alert,
 } from "react-native";
-import ArrowLeftIcon from "../../../assets/images/arrow-left.svg";
+import ArrowLeftIcon from "../../../../assets/images/arrow-left.svg";
 import { styles } from "./CommentsScreenStyle";
 import { Comment } from "./oneComment/OneComment";
-import ArrowUpIcon from "../../../assets/images/arrow-up.svg";
-import { POSTS } from "../../../posts";
+import ArrowUpIcon from "../../../../assets/images/arrow-up.svg";
+import { POSTS } from "../../../../posts";
 
 const CommentScreen = ({ navigation, route }) => {
   const { comments, photo, id: postId } = route.params.post;

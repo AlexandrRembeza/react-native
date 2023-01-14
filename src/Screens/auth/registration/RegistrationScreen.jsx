@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { styles } from "./RegistrationScreenStyle";
-import AddIcon from "../../../assets/images/addicon.svg";
+import AddIcon from "../../../../assets/images/addicon.svg";
 import { useState, useEffect } from "react";
 
 export default function RegistrationScreen({ navigation }) {
@@ -56,7 +56,7 @@ export default function RegistrationScreen({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ImageBackground
-        source={require("../../../assets/images/registerBG.png")}
+        source={require("../../../../assets/images/registerBG.png")}
         style={styles.bgImage}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

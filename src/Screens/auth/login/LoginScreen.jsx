@@ -51,7 +51,7 @@ export default function LoginScreen({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ImageBackground
-        source={require("../../../assets/images/registerBG.png")}
+        source={require("../../../../assets/images/registerBG.png")}
         style={styles.bgImage}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
