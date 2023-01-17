@@ -4,6 +4,10 @@ export const POSTS = [
     photo: "https://i.ibb.co/5LWgQpn/forest.jpg",
     text: "Forest",
     location: "Ivano-Frankivs'k Region, Ukraine",
+    exactLocation: {
+      latitude: 48.55,
+      longitude: 24.42,
+    },
     likes: "153",
     comments: [
       {
@@ -63,6 +67,10 @@ export const POSTS = [
     photo: "https://i.ibb.co/4d1Nnbp/sunset.jpg",
     text: "Sunset on the Black sea",
     location: "Ukraine",
+    exactLocation: {
+      latitude: 49,
+      longitude: 32,
+    },
     likes: "200",
     comments: [
       {
@@ -90,6 +98,10 @@ export const POSTS = [
     photo: "https://i.ibb.co/6Wp4YSR/oldHouse.jpg",
     text: "Old house in Venice",
     location: "Italy",
+    exactLocation: {
+      latitude: 42.5,
+      longitude: 12.5,
+    },
     likes: "200",
     comments: [
       {

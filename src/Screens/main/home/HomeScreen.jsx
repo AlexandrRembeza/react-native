@@ -9,6 +9,7 @@ import PostsScreen from "../posts/PostsScreen";
 import CreatePostsScreen from "../createPost/CreatePostsScreen";
 import ProfileScreen from "../profile/ProfileScreen";
 import CommentScreen from "../comments/CommentsScreen";
+import MapScreen from "../mapScreen/MapScreen";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -44,7 +45,7 @@ const HomeScreen = ({ route }) => {
       <Screen
         name="CreatePostsScreen"
         component={CreatePostsScreen}
-        options={{ tabBarStyle: { display: "none" } }}
+        options={{ tabBarStyle: { display: "none" }, unmountOnBlur: true }}
       />
       <Screen
         name="Profile"
@@ -63,6 +64,15 @@ const HomeScreen = ({ route }) => {
         options={{
           tabBarItemStyle: { display: "none" },
           tabBarStyle: { display: "none" },
+        }}
+      />
+      <Screen
+        name="Map"
+        component={MapScreen}
+        options={{
+          tabBarItemStyle: { display: "none" },
+          tabBarStyle: { display: "none" },
+          unmountOnBlur: true,
         }}
       />
     </Navigator>

@@ -7,10 +7,12 @@ import { POSTS } from "../../../../posts";
 
 const PostsScreen = ({ navigation, user: { name, email } }) => {
   const lastElemId = POSTS[POSTS.length - 1].id;
-  const handleLogout = () => navigation.navigate("Login");
 
-  const handlePostClick = (post) => {
+  const handleLogout = () => navigation.navigate("Login");
+  const handleCommentClick = (post) =>
     navigation.navigate("Comments", { post });
+  const handleLocationClick = (location, title) => {
+    navigation.navigate("Map", { location, title });
   };
 
   return (
@@ -39,7 +41,12 @@ const PostsScreen = ({ navigation, user: { name, email } }) => {
         style={styles.postsContainer}
         data={POSTS}
         renderItem={({ item }) => (
-          <Post post={item} lastElemId={lastElemId} onClick={handlePostClick} />
+          <Post
+            post={item}
+            lastElemId={lastElemId}
+            handleCommentClick={handleCommentClick}
+            handleLocationClick={handleLocationClick}
+          />
         )}
         keyExtractor={({ id }) => id}
       />

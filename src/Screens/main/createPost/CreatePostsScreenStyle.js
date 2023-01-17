@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
   },
-  image: {
+  imageWrap: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
@@ -65,6 +65,29 @@ export const styles = StyleSheet.create({
     borderColor: "#E8E8E8",
     borderRadius: 8,
   },
+  image: {
+    width: "100%",
+    height: 240,
+    resizeMode: "cover",
+    borderRadius: 8,
+  },
+  cameraWrap: {
+    position: "relative",
+    width: "100%",
+    height: 240,
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
+    borderRadius: 8,
+    overflow: "hidden",
+  },
+  camera: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
+  },
   imageCircle: {
     display: "flex",
     alignItems: "center",
@@ -73,6 +96,23 @@ export const styles = StyleSheet.create({
     height: 60,
     backgroundColor: "#ffffff",
     borderRadius: 50,
+  },
+  flipBtn: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    top: 10,
+    right: 10,
+    width: 40,
+    height: 40,
+    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    borderRadius: 50,
+  },
+  flipText: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 15,
+    color: "#ffffff",
   },
   uploadPhoto: {
     fontFamily: "Roboto-Regular",

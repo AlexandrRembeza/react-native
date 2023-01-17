@@ -15,8 +15,10 @@ import { styles } from "./CommentsScreenStyle";
 import { Comment } from "./oneComment/OneComment";
 import ArrowUpIcon from "../../../../assets/images/arrow-up.svg";
 import { POSTS } from "../../../../posts";
+import shortid from "shortid";
 
 const CommentScreen = ({ navigation, route }) => {
+  const { fromProfile } = route.params;
   const { comments, photo, id: postId } = route.params.post;
 
   const [onFocus, setOnFocus] = useState(false);
@@ -28,7 +30,7 @@ const CommentScreen = ({ navigation, route }) => {
       POSTS.map(({ id, comments }) => {
         if (id === postId) {
           comments.push({
-            id: `${Number(comments[comments.length - 1].id) + 1}`,
+            id: shortid.generate(),
             comment,
             avatar: "https://i.ibb.co/ZzF2Dw4/Ellipse.jpg",
             date: "09 June, 2020 | 09:14",
@@ -41,7 +43,10 @@ const CommentScreen = ({ navigation, route }) => {
     return Alert.alert("Empty comment");
   };
 
-  const lastCommentId = comments[comments.length - 1].id;
+  const lastCommentId = (() => {
+    if (comments.length === 0) return false;
+    return comments[comments.length - 1].id;
+  })();
 
   return (
     <View style={styles.container}>
@@ -51,13 +56,11 @@ const CommentScreen = ({ navigation, route }) => {
           <TouchableOpacity
             activeOpacity={0.6}
             style={styles.goBackButton}
-            onPress={() => {
-              if (route.params.fromProfile)
-                return navigation.navigate("Profile");
-              navigation.navigate("Posts");
-            }}
+            onPress={() =>
+              navigation.navigate(fromProfile ? "Profile" : "Posts")
+            }
           >
-            <ArrowLeftIcon />
+            <ArrowLeftIcon stroke="rgba(33, 33, 33, 0.8)" />
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>

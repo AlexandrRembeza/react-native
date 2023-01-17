@@ -14,8 +14,11 @@ import { Post } from "../onePost/OnePost";
 
 const ProfileScreen = ({ navigation, user: { name } }) => {
   const handleLogout = () => navigation.navigate("Login");
-  const handlePostClick = (post) => {
+  const handleCommentClick = (post) => {
     navigation.navigate("Comments", { post, fromProfile: true });
+  };
+  const handleLocationClick = (location, title) => {
+    navigation.navigate("Map", { location, title, fromProfile: true });
   };
   const lastElemId = POSTS[POSTS.length - 1].id;
 
@@ -54,7 +57,8 @@ const ProfileScreen = ({ navigation, user: { name } }) => {
                 key={item.id}
                 post={item}
                 lastElemId={lastElemId}
-                onClick={handlePostClick}
+                handleCommentClick={handleCommentClick}
+                handleLocationClick={handleLocationClick}
                 fromProfile={true}
               />
             ))}
