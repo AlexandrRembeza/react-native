@@ -18,10 +18,9 @@ const MapScreen = ({ navigation, route: { params } }) => {
         <TouchableOpacity
           activeOpacity={0.6}
           style={styles.goBackButton}
-          onPress={() => {
-            if (params.fromProfile) return navigation.navigate("Profile");
-            navigation.navigate("Posts");
-          }}
+          onPress={() =>
+            navigation.navigate(params.fromProfile ? "Profile" : "Posts")
+          }
         >
           <ArrowLeftIcon stroke="#ffffff" />
         </TouchableOpacity>
