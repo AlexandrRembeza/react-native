@@ -39,13 +39,18 @@ const CreatePostsScreen = ({ navigation }) => {
     (async () => {
       await requestPermission();
       await reqLocationPermission();
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
       const { coords } = await Location.getCurrentPositionAsync();
       setUserLocation({
         latitude: coords.latitude,
         longitude: coords.longitude,
       });
     })();
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     const showKeyboard = Keyboard.addListener("keyboardDidShow", () =>
