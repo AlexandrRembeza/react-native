@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   View,
   TextInput,
@@ -8,27 +8,30 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
-} from "react-native";
-import { styles } from "./CreatePostsScreenStyle";
-import ArrowLeftIcon from "../../../../assets/images/arrow-left.svg";
-import CameraIcon from "../../../../assets/images/camera.svg";
-import MapPinIcon from "../../../../assets/images/map-pin.svg";
-import TrashIcon from "../../../../assets/images/trash-2.svg";
-import { Camera, CameraType } from "expo-camera";
-import * as Location from "expo-location";
-import { POSTS } from "../../../../posts";
-import shortid from "shortid";
+} from 'react-native';
+import { Camera, CameraType } from 'expo-camera';
+import * as Location from 'expo-location';
+import shortid from 'shortid';
+import { useSelector } from 'react-redux';
+
+import { styles } from './CreatePostsScreenStyle';
+import ArrowLeftIcon from '../../../../assets/images/arrow-left.svg';
+import CameraIcon from '../../../../assets/images/camera.svg';
+import MapPinIcon from '../../../../assets/images/map-pin.svg';
+import TrashIcon from '../../../../assets/images/trash-2.svg';
+import { storage, firestore } from '../../../firebase/config';
 
 const CreatePostsScreen = ({ navigation }) => {
+  const { userId, nickname } = useSelector(({ auth }) => auth);
   const [location, reqLocationPermission] = Location.useForegroundPermissions();
+  const [userLocation, setUserLocation] = useState(null);
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(CameraType.back);
-  const [userLocation, setUserLocation] = useState(null);
   const [post, setPost] = useState({
     image: null,
-    name: "",
-    location: "",
+    name: '',
+    location: '',
   });
   const [isShownKeyboard, setIsShownKeyboard] = useState(false);
 
@@ -53,12 +56,8 @@ const CreatePostsScreen = ({ navigation }) => {
   }, [location]);
 
   useEffect(() => {
-    const showKeyboard = Keyboard.addListener("keyboardDidShow", () =>
-      setIsShownKeyboard(true)
-    );
-    const hideKeyboard = Keyboard.addListener("keyboardDidHide", () =>
-      setIsShownKeyboard(false)
-    );
+    const showKeyboard = Keyboard.addListener('keyboardDidShow', () => setIsShownKeyboard(true));
+    const hideKeyboard = Keyboard.addListener('keyboardDidHide', () => setIsShownKeyboard(false));
     return () => {
       showKeyboard.remove();
       hideKeyboard.remove();
@@ -66,11 +65,7 @@ const CreatePostsScreen = ({ navigation }) => {
   }, []);
 
   const resetForm = () => {
-    setPost({
-      image: null,
-      name: "",
-      location: "",
-    });
+    setPost({ image: null, name: '', location: '' });
   };
 
   const changeCameraType = () => {
@@ -80,31 +75,38 @@ const CreatePostsScreen = ({ navigation }) => {
   const takePhoto = async () => {
     if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
-      setPost((s) => ({
-        ...s,
-        image: uri,
-      }));
+      setPost(s => ({ ...s, image: uri }));
     }
   };
 
-  const publishPost = async () => {
-    if (!isAllFieldsCompleted) return Alert.alert("You have empty fields");
-    POSTS.unshift({
-      id: shortid.generate(),
-      text: post.name,
+  const uploadPhotoToServer = async image => {
+    const file = await (await fetch(image)).blob();
+    const id = shortid.generate();
+    await storage.ref(`postsImages/${id}`).put(file);
+    return await storage.ref('postsImages').child(id).getDownloadURL();
+  };
+
+  const uploadPostToServer = async () => {
+    if (!isAllFieldsCompleted) return Alert.alert('You have empty fields');
+    const uploadedPhotoUrl = await uploadPhotoToServer(post.image);
+    const res = await firestore.collection('posts').add({
+      userId,
+      nickname,
+      postText: post.name,
       location: post.location,
-      exactLocation: {
-        ...userLocation,
-      },
-      photo: post.image,
+      exactLocation: userLocation,
+      photo: uploadedPhotoUrl,
       likes: Math.floor(Math.random() * (201 - 0) + 0),
-      comments: [],
+      date: Date.now(),
     });
-    navigation.navigate("Posts");
+    if (res) {
+      resetForm();
+      navigation.navigate('Posts');
+    }
   };
 
   if (!permission || !location) return null;
-  if (!permission.granted) Alert.alert("No access to camera");
+  if (!permission.granted) Alert.alert('No access to camera');
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -114,28 +116,18 @@ const CreatePostsScreen = ({ navigation }) => {
           <TouchableOpacity
             activeOpacity={0.6}
             style={styles.goBackButton}
-            onPress={() => navigation.navigate("Posts")}
+            onPress={() => navigation.navigate('Posts')}
           >
             <ArrowLeftIcon stroke="rgba(33, 33, 33, 0.8)" />
           </TouchableOpacity>
         </View>
 
         <View style={styles.formContainer}>
-          <View
-            style={{
-              ...styles.loadImageContainer,
-              marginBottom: !isShownKeyboard ? 32 : 10,
-            }}
-          >
+          <View style={{ ...styles.loadImageContainer, marginBottom: !isShownKeyboard ? 32 : 10 }}>
             {!post.image && !permission.granted && (
               <View style={styles.imageWrap}>
-                <View
-                  style={{
-                    ...styles.imageCircle,
-                    backgroundColor: "#ffffff",
-                  }}
-                >
-                  <CameraIcon fill={"#BDBDBD"} />
+                <View style={{ ...styles.imageCircle, backgroundColor: '#ffffff' }}>
+                  <CameraIcon fill={'#BDBDBD'} />
                 </View>
               </View>
             )}
@@ -146,11 +138,11 @@ const CreatePostsScreen = ({ navigation }) => {
                     activeOpacity={0.6}
                     style={{
                       ...styles.imageCircle,
-                      backgroundColor: "rgba(255, 255, 255, 0.3)",
+                      backgroundColor: 'rgba(255, 255, 255, 0.3)',
                     }}
                     onPress={takePhoto}
                   >
-                    <CameraIcon fill={"#ffffff"} />
+                    <CameraIcon fill={'#ffffff'} />
                   </TouchableOpacity>
                   <TouchableOpacity
                     activeOpacity={0.6}
@@ -162,37 +154,29 @@ const CreatePostsScreen = ({ navigation }) => {
                 </Camera>
               </View>
             )}
-            {post.image && (
-              <Image source={{ uri: post.image }} style={styles.image} />
-            )}
+            {post.image && <Image source={{ uri: post.image }} style={styles.image} />}
             <Text
               style={{
                 ...styles.uploadPhoto,
-                color: post.image ? "#FF6C00" : "#BDBDBD",
+                color: post.image ? '#FF6C00' : '#BDBDBD',
               }}
               onPress={() => {
                 if (!post.image) return;
-                setPost((s) => ({
-                  ...s,
-                  image: null,
-                }));
+                setPost(s => ({ ...s, image: null }));
               }}
             >
-              {post.image ? "Edit photo" : "Upload photo"}
+              {post.image ? 'Edit photo' : 'Upload photo'}
             </Text>
           </View>
           <View style={styles.inputWrap}>
             <TextInput
               style={{ ...styles.input, paddingLeft: 0 }}
               value={post.name}
-              onChangeText={(text) => setPost((s) => ({ ...s, name: text }))}
+              onChangeText={text => setPost(s => ({ ...s, name: text }))}
               cursorColor="#BDBDBD"
             />
             <View
-              style={{
-                ...styles.namePlaceholderWrap,
-                display: post.name ? "none" : "flex",
-              }}
+              style={{ ...styles.namePlaceholderWrap, display: post.name ? 'none' : 'flex' }}
               pointerEvents="none"
             >
               <Text style={styles.namePlaceholder}>Name...</Text>
@@ -202,9 +186,7 @@ const CreatePostsScreen = ({ navigation }) => {
             <TextInput
               style={styles.input}
               value={post.location}
-              onChangeText={(text) =>
-                setPost((s) => ({ ...s, location: text }))
-              }
+              onChangeText={text => setPost(s => ({ ...s, location: text }))}
               maxLength={32}
               cursorColor="#BDBDBD"
             />
@@ -212,7 +194,7 @@ const CreatePostsScreen = ({ navigation }) => {
             <View
               style={{
                 ...styles.locationPlaceholderWrap,
-                display: post.location ? "none" : "flex",
+                display: post.location ? 'none' : 'flex',
               }}
               pointerEvents="none"
             >
@@ -223,14 +205,14 @@ const CreatePostsScreen = ({ navigation }) => {
             activeOpacity={0.6}
             style={{
               ...styles.publishButton,
-              backgroundColor: isAllFieldsCompleted ? "#FF6C00" : "#F6F6F6",
+              backgroundColor: isAllFieldsCompleted ? '#FF6C00' : '#F6F6F6',
             }}
-            onPress={publishPost}
+            onPress={uploadPostToServer}
           >
             <Text
               style={{
                 ...styles.publishButtonText,
-                color: isAllFieldsCompleted ? "#ffffff" : "#BDBDBD",
+                color: isAllFieldsCompleted ? '#ffffff' : '#BDBDBD',
               }}
             >
               Publish
@@ -241,13 +223,13 @@ const CreatePostsScreen = ({ navigation }) => {
               activeOpacity={0.6}
               style={{
                 ...styles.clearButton,
-                backgroundColor: isOneOfFieldsCompleted ? "#FF6C00" : "#F6F6F6",
+                backgroundColor: isOneOfFieldsCompleted ? '#FF6C00' : '#F6F6F6',
               }}
               onPress={resetForm}
             >
               <TrashIcon
-                stroke={isOneOfFieldsCompleted ? "#ffffff" : "#BDBDBD"}
-                fill={isOneOfFieldsCompleted ? "#ffffff" : "#BDBDBD"}
+                stroke={isOneOfFieldsCompleted ? '#ffffff' : '#BDBDBD'}
+                fill={isOneOfFieldsCompleted ? '#ffffff' : '#BDBDBD'}
               />
             </TouchableOpacity>
           </View>

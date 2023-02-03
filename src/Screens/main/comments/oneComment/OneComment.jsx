@@ -1,36 +1,43 @@
-import React, { useState } from "react";
-import { View, Text, Image } from "react-native";
-import { styles } from "./OneCommentStyle";
+import React, { useState } from 'react';
+import { View, Text, Image } from 'react-native';
+import { useSelector } from 'react-redux';
+import { styles } from './OneCommentStyle';
+import { selectUserId } from '../../../../redux/auth/authSelectors';
 
 export const Comment = ({ comment, index, lastCommentId }) => {
   const [i] = useState(index + 1);
+  const userId = useSelector(selectUserId);
+
+  const { comment: text, commentAuthor, date } = comment;
+  const isCurrentUserComment = userId === commentAuthor.id;
 
   return (
     <View
       style={{
         ...styles.commentContainer,
         marginBottom: comment.id === lastCommentId ? 0 : 24,
-        flexDirection: i % 2 === 0 ? "row-reverse" : "row",
       }}
     >
-      <Image source={{ uri: comment.avatar }} style={styles.avatar} />
+      <Text
+        style={{ ...styles.commentNickname, textAlign: isCurrentUserComment ? 'right' : 'left' }}
+      >
+        {commentAuthor.nickname}
+      </Text>
       <View
         style={{
           ...styles.commentWrap,
-          marginRight: i % 2 === 0 ? 16 : 0,
-          marginLeft: i % 2 !== 0 ? 16 : 0,
-          borderTopRightRadius: i % 2 === 0 ? 0 : 6,
-          borderTopLeftRadius: i % 2 !== 0 ? 0 : 6,
+          backgroundColor: isCurrentUserComment ? 'rgb(255, 112, 9)' : 'rgba(0, 0, 0, 0.03)',
         }}
       >
-        <Text style={styles.commentText}>{comment.comment}</Text>
+        <Text style={styles.commentText}>{text}</Text>
         <Text
           style={{
             ...styles.commentDate,
-            textAlign: i % 2 !== 0 ? "right" : "left",
+            textAlign: isCurrentUserComment ? 'right' : 'left',
+            color: isCurrentUserComment ? '#ffffff' : '#BDBDBD',
           }}
         >
-          {comment.date}
+          {new Date(Number(date)).toLocaleString()}
         </Text>
       </View>
     </View>

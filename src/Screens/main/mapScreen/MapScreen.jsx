@@ -1,8 +1,8 @@
-import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import { styles } from "./MapScreenStyle";
-import ArrowLeftIcon from "../../../../assets/images/arrow-left.svg";
-import MapView, { Marker } from "react-native-maps";
+import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { styles } from './MapScreenStyle';
+import ArrowLeftIcon from '../../../../assets/images/arrow-left.svg';
+import MapView, { Marker } from 'react-native-maps';
 
 const MapScreen = ({ navigation, route: { params } }) => {
   const defaultLocation = {
@@ -11,15 +11,10 @@ const MapScreen = ({ navigation, route: { params } }) => {
   };
 
   const location =
-    params.location.latitude && params.location.longitude
-      ? params.location
-      : defaultLocation;
+    params.location.latitude && params.location.longitude ? params.location : defaultLocation;
 
   const fullLocation =
-    String(location.latitude).length > 5 &&
-    String(location.longitude).length > 5
-      ? true
-      : false;
+    String(location.latitude).length > 5 && String(location.longitude).length > 5 ? true : false;
 
   return (
     <View style={styles.container}>
@@ -28,9 +23,7 @@ const MapScreen = ({ navigation, route: { params } }) => {
         <TouchableOpacity
           activeOpacity={0.6}
           style={styles.goBackButton}
-          onPress={() =>
-            navigation.navigate(params.fromProfile ? "Profile" : "Posts")
-          }
+          onPress={() => navigation.navigate(params.fromProfile ? 'Profile' : 'Posts')}
         >
           <ArrowLeftIcon stroke="#ffffff" />
         </TouchableOpacity>

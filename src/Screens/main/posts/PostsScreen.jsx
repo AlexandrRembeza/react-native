@@ -1,29 +1,37 @@
-import React from "react";
-import { View, Text, TouchableOpacity, FlatList } from "react-native";
-import Logout from "../../../../assets/images/logout.svg";
-import { styles } from "./PostsScreenStyle";
-import { Post } from "../onePost/OnePost";
-import { POSTS } from "../../../../posts";
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import Logout from '../../../../assets/images/logout.svg';
+import { styles } from './PostsScreenStyle';
+import { Post } from '../onePost/OnePost';
+import { signOutUser } from '../../../redux/auth/authOperations';
+import { selectUser } from '../../../redux/auth/authSelectors';
+import { firestore } from '../../../firebase/config';
 
-const PostsScreen = ({ navigation, user: { name, email } }) => {
-  const lastElemId = POSTS[POSTS.length - 1].id;
+const PostsScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const { nickname, email } = useSelector(selectUser);
+  const [posts, setPosts] = useState([]);
 
-  const handleLogout = () => navigation.navigate("Login");
-  const handleCommentClick = (post) =>
-    navigation.navigate("Comments", { post });
+  const handleLogout = () => dispatch(signOutUser());
+  const handleCommentClick = post => navigation.navigate('Comments', { post });
   const handleLocationClick = (location, title) => {
-    navigation.navigate("Map", { location, title });
+    navigation.navigate('Map', { location, title });
   };
+
+  useEffect(() => {
+    (async () => {
+      await firestore
+        .collection('posts')
+        .onSnapshot(data => setPosts(data.docs.map(doc => ({ ...doc.data(), id: doc.id }))));
+    })();
+  }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Posts</Text>
-        <TouchableOpacity
-          activeOpacity={0.6}
-          style={styles.logoutButton}
-          onPress={handleLogout}
-        >
+        <TouchableOpacity activeOpacity={0.6} style={styles.logoutButton} onPress={handleLogout}>
           <Logout />
         </TouchableOpacity>
       </View>
@@ -33,17 +41,17 @@ const PostsScreen = ({ navigation, user: { name, email } }) => {
           <View style={styles.userContainer}>
             <View style={styles.userPhoto}></View>
             <View style={styles.userInfo}>
-              <Text style={styles.userName}>{name}</Text>
+              <Text style={styles.userName}>{nickname}</Text>
               <Text style={styles.userEmail}>{email}</Text>
             </View>
           </View>
         }
         style={styles.postsContainer}
-        data={POSTS}
+        data={posts.sort((a, b) => Number(b.date) - Number(a.date))}
         renderItem={({ item }) => (
           <Post
             post={item}
-            lastElemId={lastElemId}
+            lastElemId={posts[posts.length - 1].id}
             handleCommentClick={handleCommentClick}
             handleLocationClick={handleLocationClick}
           />
